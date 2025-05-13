@@ -1,4 +1,5 @@
-package com.fifteen.auction.domain.user.auth.util;
+package com.example.baroassignment.global.jwt;
+
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -19,8 +20,7 @@ import java.util.Date;
 public class JwtUtil {
 
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
-    private static final long REFRESH_TOKEN_TIME = 14 * 24 * 60 * 60 * 1000L; // 14일
+    private static final long TOKEN_TIME = 60 * 120 * 1000L;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -43,27 +43,9 @@ public class JwtUtil {
                         .claim("nickname", nickname)
                         .claim("role", role)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
-                        .setIssuedAt(date) // 발급일
-                        .signWith(key, signatureAlgorithm) // 암호화 알고리즘
-                        .compact();
-    }
-
-    // Refresh Token 생성
-    public String createRefreshToken(Long userId) {
-        Date now = new Date();
-
-        return BEARER_PREFIX +
-                Jwts.builder()
-                        .setSubject(String.valueOf(userId)) //refresh token 내에 최소한의 정보만 넣는 것이 일반적.
-                        .setIssuedAt(now)
-                        .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
+                        .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
                         .compact();
-    }
-
-    // Refresh Token 유효 시간 반환 (ms)
-    public long getRefreshTokenExpiry() {
-        return REFRESH_TOKEN_TIME;
     }
 
     public String substringToken(String tokenValue) {
@@ -81,14 +63,12 @@ public class JwtUtil {
                 .getBody();
     }
 
-    // 토큰의 남은 만료 시간 계산 (ms 단위)
     public Long getTokenExpiration(String token) {
         Claims claims = extractClaims(token);
         Date expiration = claims.getExpiration();
         return expiration.getTime() - System.currentTimeMillis();
     }
 
-    // 토큰 유효성 검사 (예외 발생 시 false)
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -97,11 +77,5 @@ public class JwtUtil {
             log.warn("Invalid JWT Token: {}", e.getMessage());
             return false;
         }
-    }
-
-    // RefreshToken에서 사용자 ID 추출
-    public Long extractUserId(String token) {
-        Claims claims = extractClaims(token);
-        return Long.parseLong(claims.getSubject());
     }
 }

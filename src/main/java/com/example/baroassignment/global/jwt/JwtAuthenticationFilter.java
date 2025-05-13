@@ -1,7 +1,7 @@
-package com.fifteen.auction.domain.user.auth.filter;
+package com.example.baroassignment.global.jwt;
 
-import com.fifteen.auction.domain.user.auth.entity.AuthUser;
-import com.fifteen.auction.domain.user.auth.util.JwtUtil;
+
+import com.example.baroassignment.domain.auth.dto.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -37,11 +37,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain chain
     ) throws ServletException, IOException {
 
-        // /api/v1/auth/** 경로는 JWT 검증 없이 통과
-         if (httpRequest.getRequestURI().startsWith("/api/v1/auth")) {
-            chain.doFilter(httpRequest, httpResponse);
-            return;
-         }
+
+//         if (httpRequest.getRequestURI().startsWith("auth")) {
+//            chain.doFilter(httpRequest, httpResponse);
+//            return;
+//         }
 
         String authorizationHeader = httpRequest.getHeader("Authorization");
 
