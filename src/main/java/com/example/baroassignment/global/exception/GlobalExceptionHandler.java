@@ -26,12 +26,12 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .map(FieldError::getDefaultMessage)
                 .orElse("유효성 검사 오류가 발생했습니다.");
-        // MethodArgumentNotValidException에 대한 ErrorCode 정의 (예시)
         return getErrorResponse(HttpStatus.BAD_REQUEST, ErrorCode.UNKNOWN);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomExceptionResponse> handleAllExceptions(Exception e) {
+        log.error("Exception", e);
         return getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.UNKNOWN);
     }
 

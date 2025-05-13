@@ -4,10 +4,6 @@ import com.example.baroassignment.domain.auth.enums.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 @Getter
 @Setter
 public class User {
@@ -27,6 +23,12 @@ public class User {
             this.role=UserRole.ROLE_ADMIN;
         }else{
             this.role=UserRole.ROLE_USER;
+        }
+    }
+
+    public void updateToAdmin(){
+        if (this.role != UserRole.ROLE_ADMIN) {
+            this.role = UserRole.ROLE_ADMIN;
         }
     }
 }
