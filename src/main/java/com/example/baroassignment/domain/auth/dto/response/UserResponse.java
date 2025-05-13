@@ -10,15 +10,15 @@ import java.util.Map;
 
 @Getter
 @AllArgsConstructor
-public class SignupResponse {
+public class UserResponse {
     private String username;
     private String nickname;
     private List<Map<String, String>> roles;
 
-    public static SignupResponse from(User user) {
+    public static UserResponse from(User user) {
         Map<String, String> roleMap = new HashMap<>();
         roleMap.put("role", user.getRole().name());
-        return new SignupResponse(
+        return new UserResponse(
                 user.getUsername(),
                 user.getNickname(),
                 List.of(roleMap)
