@@ -3,6 +3,7 @@ package com.example.baroassignment.global.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +17,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<CustomExceptionResponse> handleCustomException(CustomException e) {
         return getErrorResponse(e.getStatus(), e.getErrorCode());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<CustomExceptionResponse> handleAccessDeniedException(AccessDeniedException e) {
+        return getErrorResponse(HttpStatus.FORBIDDEN, ErrorCode.ACCESS_DENIED);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
