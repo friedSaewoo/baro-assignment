@@ -30,7 +30,6 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final ObjectMapper objectMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,31 +51,9 @@ public class SecurityConfig {
                 .rememberMe(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(("/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(("/admin/**")).authenticated()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.accessDeniedHandler(accessDeniedHandler())
-                )
                 .build();
-    }
-
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, accessDeniedException) -> {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
-            try {
-                Map<String, Map<String, String>> errorResponse = Map.of(
-                        "error", Map.of(
-                                "code", "ACCESS_DENIED",
-                                "message", "관리자 권한이 필요한 요청입니다. 접근 권한이 없습니다."
-                        )
-                );
-                objectMapper.writeValue(response.getWriter(), errorResponse);
-            } catch (IOException e) {
-                log.error("AccessDeniedHandler JSON 응답 생성 실패: {}", e.getMessage(), e);
-            }
-        };
     }
 }
