@@ -4,7 +4,8 @@
 In-Memory 방식을 활용한 간단한 인증 및 인가 기능과 관리자 권한 부여 기능을 포함하고 있습니다.
 
 # 실행 방법 
-### 1. JDK 설치: 본 프로젝트는 JDK 17 환경에서 개발되었습니다. JDK 17이 설치되어 있는지 확인해 주세요.
+### 1. JDK 설치
+본 프로젝트는 JDK 17 환경에서 개발되었습니다. JDK 17이 설치되어 있는지 확인해 주세요.
 ```bash
 java -version
 sudo apt update
@@ -36,8 +37,8 @@ jwt:
              │ HTTP 요청
              ▼
 ┌────────────────────────────┐
-│      Nginx (Reverse Proxy) │
-│  - 80/443 포트 리스닝       │
+│    Nginx (Reverse Proxy)   │
+│  - 80 포트 리스닝           │
 │  - 요청을 Spring Boot로 전달│
 └────────────┬───────────────┘
              │ Proxy Pass (localhost:8080)
